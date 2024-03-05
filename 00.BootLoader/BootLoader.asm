@@ -3,12 +3,18 @@
 
 SECTION .text
 
-mov ax, 0xB800
-mov ds, ax
-mov byte [0x00], 'M'
-mov byte [0x01], 0x0A
+jmp 0x07C0:START
 
-jmp $
+START:
+  mov ax, 0x07C0
+  mov ds, ax
+  mov ax, 0xB800
+  mov es, ax
+
+  mov byte [ es: 0x00 ], 'M'
+  mov byte [ es: 0x01 ], 0x0A
+
+  jmp $
 
 times 510 - ($ - $$) db 0x00
 
