@@ -20,7 +20,7 @@ START:
   mov ax, 2
   mul word [ SECTORCOUNT ]
   mov si, ax
-  mov byte [ es: si + (160 * 2) ], '0'
+  mov byte [ es: si + (160 * 2) ], '0' + (i % 10)
 
   add word [ SECTORCOUNT ], 1
 
