@@ -10,7 +10,11 @@ RUN apt install -y \
 	wget \
 	tmux \
 	zsh \
-	curl
+	curl \
+  cmake \
+  gettext \
+  clangd \
+  unzip
 
 RUN chsh -s /usr/bin/zsh
 
