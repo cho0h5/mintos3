@@ -14,7 +14,7 @@ clean:
 	make -C 01.Kernel32 clean
 	rm -f Disk.img
 
-test:
+test: all
 	qemu-system-x86_64 \
     -L . -m 64 -M pc \
     -blockdev driver=file,node-name=f0,filename=./Disk.img \
