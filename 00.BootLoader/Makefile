@@ -6,4 +6,4 @@ BootLoader.bin: BootLoader.asm
 clean:
 	rm -f BootLoader.bin
 
-.PHONY: clean all BootLoader.bin
+.PHONY: clean all
