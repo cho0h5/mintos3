@@ -1,4 +1,4 @@
-// from https://github.com/kkamagui/mint64os-examples/blob/master/source_code/chap07/01.Kernel32/elf_i386.x
+/* from https://github.com/kkamagui/mint64os-examples/blob/master/source_code/chap07/01.Kernel32/elf_i386.x */
 
 /* Default linker script, for normal executables */
 OUTPUT_FORMAT("elf32-i386", "elf32-i386",
