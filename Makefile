@@ -1,13 +1,13 @@
 all: Disk.img
 
-BootLoader:
+00.BootLoader/BootLoader.bin:
 	make -C 00.BootLoader
 
-Kernel32:
+01.Kernel32/Kernel32.bin:
 	make -C 01.Kernel32
 
-Disk.img: BootLoader Kernel32
-	cat 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin > Disk.img
+Disk.img: 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin
+	cat $^ > Disk.img
 
 clean:
 	make -C 00.BootLoader clean
