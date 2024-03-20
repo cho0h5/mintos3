@@ -3,6 +3,8 @@ GCC32 = x86_64-linux-gnu-gcc -c -m32 -ffreestanding
 LD32 = x86_64-linux-gnu-ld -melf_i386 -T ../elf_i386.x -nostdlib -e Main -Ttext 0x10200
 OBJCOPY32 = x86_64-linux-gnu-objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
 
+LDFLAGS	=	-lrusty -L../Rust/target/i686-unknown-linux-gnu/release
+
 OBJECTDIRECTORY = Temp
 SOURCEDIRECTORY = Source
 
@@ -45,7 +47,7 @@ InternalDependency:
 	$(GCC32) -MM $(CSOURCEFILES) > Dependency.dep
 
 Kernel32.elf: $(CENTRYPOINTOBJECTFILE) $(COBJECTFILES) $(ASSEMBLYOBJECTFILES)
-	$(LD32) -o $@ $^
+	$(LD32) -o $@ $^ $(LDFLAGS)
 
 ifeq (Dependency.dep, $(wildcard Dependency.dep))
 include Dependency.dep

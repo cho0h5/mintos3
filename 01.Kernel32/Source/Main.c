@@ -2,8 +2,10 @@
 
 void kPrintString(int iX, int iY, const char *pcString);
 
+extern int add(int a, int b);
+
 void Main() {
-  kPrintString(0, 3, "C Language Kernel Started!");
+  kPrintString(0, add(1, 3), "C Language Kernel Started!");
 
   while (1)
     ;
