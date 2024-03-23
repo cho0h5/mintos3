@@ -1,20 +1,30 @@
 #include "Types.h"
 
 void kPrintString(int iX, int iY, const char *pcString);
-BOOL kInitializeKernel64Area(void);
+BOOL kInitializeKernel64Area();
+BOOL kIsMemoryEnough();
 
 extern int add(int a, int b);
 
 void Main() {
-  kPrintString(0, 3, "C Language Kernel Started!");
-
-  if (kInitializeKernel64Area())
-    kPrintString(0, 4, "IA-32e Kernel Area Initialization Complete");
-  else {
-    kPrintString(0, 4, "IA-32e Kernel Area Initialization Failed");
+  kPrintString(0, 3, "C Language Kernel Start.....................[Pass]");
+  kPrintString(0, 4, "Mininum Memory Size Check...................[    ]");
+  if (kIsMemoryEnough() == FALSE) {
+    kPrintString(0, 4, "Fail");
+    kPrintString(0, 5, "Not Enough Memory.");
     while (1)
       ;
   }
+  kPrintString(45, 4, "Pass");
+
+  kPrintString(0, 5, "IA-32e Kernel Area Initialization...........[    ]");
+  if (kInitializeKernel64Area() == FALSE) {
+    kPrintString(45, 5, "Fail");
+    kPrintString(0, 6, "Kernel Area Initialization Fail!");
+    while (1)
+      ;
+  }
+  kPrintString(45, 5, "Pass");
 
   while (1)
     ;
@@ -41,6 +51,21 @@ BOOL kInitializeKernel64Area(void) {
       return FALSE;
     }
     pdwCurrentAddress++;
+  }
+
+  return TRUE;
+}
+
+BOOL kIsMemoryEnough(void) {
+  DWORD *pdwCurrentAddress;
+
+  pdwCurrentAddress = (DWORD *)0x100000;
+  while (pdwCurrentAddress < (DWORD *)0x4000000) {
+    *pdwCurrentAddress = 0x12345678;
+    if (*pdwCurrentAddress != 0x12345678) {
+      return FALSE;
+    }
+    pdwCurrentAddress += (0x100000 / 4);
   }
 
   return TRUE;
