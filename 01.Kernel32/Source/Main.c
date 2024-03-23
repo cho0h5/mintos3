@@ -8,8 +8,13 @@ extern int add(int a, int b);
 void Main() {
   kPrintString(0, 3, "C Language Kernel Started!");
 
-  kInitializeKernel64Area();
-  kPrintString(0, 4, "IA-32e Kernel Area Initialization Complete");
+  if (kInitializeKernel64Area())
+    kPrintString(0, 4, "IA-32e Kernel Area Initialization Complete");
+  else {
+    kPrintString(0, 4, "IA-32e Kernel Area Initialization Failed");
+    while (1)
+      ;
+  }
 
   while (1)
     ;
