@@ -39,18 +39,3 @@ void kPrintString(int iX, int iY, const char *pcString) {
     pstScreen[i].bCharactor = pcString[i];
   }
 }
-
-BOOL kIsMemoryEnough(void) {
-  DWORD *pdwCurrentAddress;
-
-  pdwCurrentAddress = (DWORD *)0x100000;
-  while (pdwCurrentAddress < (DWORD *)0x4000000) {
-    *pdwCurrentAddress = 0x12345678;
-    if (*pdwCurrentAddress != 0x12345678) {
-      return FALSE;
-    }
-    pdwCurrentAddress += (0x100000 / 4);
-  }
-
-  return TRUE;
-}

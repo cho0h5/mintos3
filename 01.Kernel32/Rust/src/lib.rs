@@ -15,12 +15,27 @@ extern "C" {
 #[no_mangle]
 pub extern "C" fn kInitializeKernel64Area() -> u8 {
     for i in 0x100000..0x600000 {
-        let pdwCurrentAddress = i as *mut u32;
+        let pdw_current_address = i as *mut u32;
 
         unsafe {
-            *pdwCurrentAddress = 0x00;
+            *pdw_current_address = 0x00;
 
-            if *pdwCurrentAddress != 0x00 {
+            if *pdw_current_address != 0x00 {
+                return 0;
+            }
+        }
+    }
+    1
+}
+
+#[no_mangle]
+pub extern "C" fn kIsMemoryEnough() -> u8 {
+    for i in (0x100000..0x4000000).step_by(0x100000 / 4) {
+        let pdw_current_address = i as *mut u32;
+
+        unsafe {
+            *pdw_current_address = 0x12345678;
+            if *pdw_current_address != 0x12345678 {
                 return 0;
             }
         }
