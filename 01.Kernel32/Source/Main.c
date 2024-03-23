@@ -1,8 +1,5 @@
+#include "Rusty.h"
 #include "Types.h"
-
-void kPrintString(int iX, int iY, const char *pcString);
-BOOL kInitializeKernel64Area();
-BOOL kIsMemoryEnough();
 
 extern int add(int a, int b);
 
