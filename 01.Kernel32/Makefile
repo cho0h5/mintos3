@@ -8,7 +8,12 @@ LDFLAGS	=	-lrusty -L../Rust/target/i686-unknown-linux-gnu/release
 OBJECTDIRECTORY = Temp
 SOURCEDIRECTORY = Source
 
-all: Kernel32.bin
+all:
+	make RustyLibrary
+	make Kernel32.bin
+
+RustyLibrary:
+	cd Rust && cargo build --release
 
 $(OBJECTDIRECTORY)/EntryPoint.bin: $(SOURCEDIRECTORY)/EntryPoint.s
 	mkdir -p $(OBJECTDIRECTORY)
