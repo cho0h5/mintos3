@@ -1,14 +1,19 @@
 NASM32 = nasm
-GCC32 = x86_64-linux-gnu-gcc -c -m32 -ffreestanding
-LD32 = x86_64-linux-gnu-ld -melf_i386 -T ../elf_i386.x -nostdlib -e Main -Ttext 0x10200
-OBJCOPY32 = x86_64-linux-gnu-objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
+GCC32 = gcc -c -m32 -ffreestanding
+LD32 = ld -melf_i386 -T ../elf_i386.x -nostdlib -e Main -Ttext 0x10200
+OBJCOPY32 = objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
 
-# LDFLAGS	=	-lrusty -L../Rust/target/i686-unknown-linux-gnu/release
+LDFLAGS	=	-lrusty -L../Rust/target/i686-unknown-linux-gnu/release
 
 OBJECTDIRECTORY = Temp
 SOURCEDIRECTORY = Source
 
-all: Kernel32.bin
+all:
+	make RustyLibrary
+	make Kernel32.bin
+
+RustyLibrary:
+	cd Rust && cargo build --release
 
 $(OBJECTDIRECTORY)/EntryPoint.bin: $(SOURCEDIRECTORY)/EntryPoint.s
 	mkdir -p $(OBJECTDIRECTORY)
@@ -30,6 +35,7 @@ Kernel32.bin: $(OBJECTDIRECTORY)/EntryPoint.bin $(OBJECTDIRECTORY)/Kernel32.elf.
 clean:
 	rm -f *.bin
 	rm -rf $(OBJECTDIRECTORY)
+	cd Rust && cargo clean
 
 CENTRYPOINTOBJECTFILE = Main.o
 CSOURCEFILES = $(wildcard ../$(SOURCEDIRECTORY)/*.c)

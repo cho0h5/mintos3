@@ -40,22 +40,6 @@ void kPrintString(int iX, int iY, const char *pcString) {
   }
 }
 
-BOOL kInitializeKernel64Area(void) {
-  DWORD *pdwCurrentAddress;
-
-  pdwCurrentAddress = (DWORD *)0x100000;
-  while (pdwCurrentAddress < (DWORD *)0x600000) {
-    *pdwCurrentAddress = 0x00;
-
-    if (*pdwCurrentAddress != 0) {
-      return FALSE;
-    }
-    pdwCurrentAddress++;
-  }
-
-  return TRUE;
-}
-
 BOOL kIsMemoryEnough(void) {
   DWORD *pdwCurrentAddress;
 
