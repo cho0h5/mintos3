@@ -1,7 +1,7 @@
-#include "Rusty.h"
 #include "Types.h"
 
 void kPrintString(int iX, int iY, const char *pcString);
+BOOL kInitializeKernel64Area(void);
 
 extern int add(int a, int b);
 
@@ -23,4 +23,20 @@ void kPrintString(int iX, int iY, const char *pcString) {
   for (i = 0; pcString[i] != 0; i++) {
     pstScreen[i].bCharactor = pcString[i];
   }
+}
+
+BOOL kInitializeKernel64Area(void) {
+  DWORD *pdwCurrentAddress;
+
+  pdwCurrentAddress = (DWORD *)0x100000;
+  while (pdwCurrentAddress < (DWORD *)0x600000) {
+    *pdwCurrentAddress = 0x00;
+
+    if (*pdwCurrentAddress != 0) {
+      return FALSE;
+    }
+    pdwCurrentAddress++;
+  }
+
+  return TRUE;
 }
