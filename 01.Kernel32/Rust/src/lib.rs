@@ -70,11 +70,16 @@ pub extern "C" fn kInitializeKernel64Area() -> u8 {
 
 #[no_mangle]
 pub extern "C" fn kIsMemoryEnough() -> u8 {
+    #[inline(never)]
+    fn ptr_set_value(ptr: *mut u32, value: u32) {
+        unsafe { *ptr = value }
+    }
+
     for i in (0x100000..0x4000000).step_by(0x100000 / 4) {
         let pdw_current_address = i as *mut u32;
 
         unsafe {
-            *pdw_current_address = 0x12345678;
+            ptr_set_value(pdw_current_address, 0x12345678);
             if *pdw_current_address != 0x12345678 {
                 return 0;
             }

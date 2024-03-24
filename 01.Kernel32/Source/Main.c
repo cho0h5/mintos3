@@ -7,7 +7,7 @@ void Main() {
   kPrintString(0, 3, "C Language Kernel Start.....................[Pass]");
   kPrintString(0, 4, "Mininum Memory Size Check...................[    ]");
   if (kIsMemoryEnough() == FALSE) {
-    kPrintString(0, 4, "Fail");
+    kPrintString(45, 4, "Fail");
     kPrintString(0, 5, "Not Enough Memory.");
     while (1)
       ;
