@@ -185,9 +185,9 @@ fn kReadCPUID(mut eax_input: u32) -> (u32, u32, u32, u32) {
 
 #[no_mangle]
 pub extern "C" fn print_cpu_manufacturer() {
-    let mut vendor: [u8; 13] = [0; 13];
+    let vendor: [u8; 13] = [0; 13];
 
-    let (eax, ebx, ecx, edx) = kReadCPUID(0x00);
+    let (_, ebx, ecx, edx) = kReadCPUID(0x00);
     let ptr_vendor = vendor.as_ptr() as *mut u32;
     unsafe {
         *ptr_vendor.add(0) = ebx;
@@ -195,4 +195,11 @@ pub extern "C" fn print_cpu_manufacturer() {
         *ptr_vendor.add(2) = ecx;
     }
     kPrintString(0, 0, vendor.as_ptr());
+}
+
+#[no_mangle]
+pub extern "C" fn is_support_64() -> u8 {
+    let (_, _, _, edx) = kReadCPUID(0x80000001);
+
+    (edx & (1 << 29) != 0) as u8
 }

@@ -8,5 +8,6 @@ BOOL kInitializeKernel64Area();
 BOOL kIsMemoryEnough();
 void k_initialize_page_tables();
 void print_cpu_manufacturer();
+BOOL is_support_64();
 
 #endif // !RUSTY_H

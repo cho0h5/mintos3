@@ -29,6 +29,12 @@ void Main() {
 
   print_cpu_manufacturer();
 
+  if (is_support_64()) {
+    kPrintString(0, 7, "Pass");
+  } else {
+    kPrintString(0, 7, "Fail");
+  }
+
   while (1)
     ;
 }
