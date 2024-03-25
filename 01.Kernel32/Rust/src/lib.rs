@@ -87,3 +87,85 @@ pub extern "C" fn kIsMemoryEnough() -> u8 {
     }
     1
 }
+
+#[repr(C)]
+struct PageTableEntryStruct {
+    dw_attribute_and_lower_base_address: u32,
+    dw_upper_base_address_and_exb: u32,
+}
+
+const PAGE_FLAGS_P: u32 = 0x00000001;
+const PAGE_FLAGS_RW: u32 = 0x00000002;
+const PAGE_FLAGS_US: u32 = 0x00000004;
+const PAGE_FLAGS_PWT: u32 = 0x00000008;
+const PAGE_FLAGS_PCD: u32 = 0x00000010;
+const PAGE_FLAGS_A: u32 = 0x00000020;
+const PAGE_FLAGS_D: u32 = 0x00000040;
+const PAGE_FLAGS_PS: u32 = 0x00000080;
+const PAGE_FLAGS_G: u32 = 0x00000100;
+const PAGE_FLAGS_PAT: u32 = 0x00001000;
+const PAGE_FLAGS_EXB: u32 = 0x80000000;
+const PAGE_FLAGS_DEFAULT: u32 = PAGE_FLAGS_P | PAGE_FLAGS_RW;
+
+const PAGE_TABLESIZE: u32 = 0x100;
+const PAGE_MAXENTRYCOUNT: usize = 512;
+const PAGE_DEFAULTSIZE: u32 = 0x200000;
+
+#[inline(never)]
+fn k_set_page_entry_data(
+    pst_entry: *mut PageTableEntryStruct,
+    dw_upper_base_address: u32,
+    dw_lower_base_address: u32,
+    dw_lower_flags: u32,
+    dw_upper_flags: u32,
+) {
+    unsafe {
+        (*pst_entry).dw_attribute_and_lower_base_address = dw_lower_base_address | dw_lower_flags;
+        (*pst_entry).dw_upper_base_address_and_exb =
+            (dw_upper_base_address & 0xff) | dw_upper_flags;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn k_initialize_page_tables() {
+    let pstPML4Entry = 0x100000 as *mut PageTableEntryStruct;
+    k_set_page_entry_data(pstPML4Entry, 0x00, 0x10100, PAGE_FLAGS_DEFAULT, 0);
+    for i in 1..PAGE_MAXENTRYCOUNT {
+        unsafe {
+            k_set_page_entry_data(pstPML4Entry.add(i), 0, 0, 0, 0);
+        }
+    }
+
+    let pstPDPTEntry = 0x101000 as *mut PageTableEntryStruct;
+    for i in 0..64 {
+        unsafe {
+            k_set_page_entry_data(
+                pstPDPTEntry.add(i),
+                0,
+                0x102000 + (i as u32 * PAGE_TABLESIZE),
+                PAGE_FLAGS_DEFAULT,
+                0,
+            );
+        }
+    }
+    for i in 64..PAGE_MAXENTRYCOUNT {
+        unsafe {
+            k_set_page_entry_data(pstPDPTEntry.add(i), 0, 0, 0, 0);
+        }
+    }
+
+    let pstPDEntry = 0x102000 as *mut PageTableEntryStruct;
+    let mut dw_mapping_address = 0;
+    for i in 0..PAGE_MAXENTRYCOUNT * 64 {
+        unsafe {
+            k_set_page_entry_data(
+                pstPDEntry.add(i),
+                (i as u32 * (PAGE_DEFAULTSIZE >> 20)) >> 12,
+                dw_mapping_address,
+                PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS,
+                0,
+            )
+        }
+        dw_mapping_address += PAGE_DEFAULTSIZE;
+    }
+}

@@ -23,6 +23,10 @@ void Main() {
   }
   kPrintString(45, 5, "Pass");
 
+  kPrintString(0, 6, "IA-32e Page Tables Initialize...............[    ]");
+  k_initialize_page_tables();
+  kPrintString(45, 6, "Pass");
+
   while (1)
     ;
 }
