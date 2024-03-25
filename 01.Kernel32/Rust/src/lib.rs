@@ -37,7 +37,7 @@ fn c_str_to_slice(c_str: *const u8) -> &'static [u8] {
 }
 
 #[no_mangle]
-pub extern "C" fn kPrintString(x: usize, y: usize, message: *mut u8) {
+pub extern "C" fn kPrintString(x: usize, y: usize, message: *const u8) {
     let message = c_str_to_slice(message);
     let mut pst_screen = 0xB8000 as *mut Character;
 
@@ -168,4 +168,31 @@ pub extern "C" fn k_initialize_page_tables() {
         }
         dw_mapping_address += PAGE_DEFAULTSIZE;
     }
+}
+
+fn kReadCPUID(mut eax_input: u32) -> (u32, u32, u32, u32) {
+    use core::arch::asm;
+
+    let eax: u32;
+    let ebx: u32;
+    let ecx: u32;
+    let edx: u32;
+    unsafe {
+        asm!("cpuid", in("eax") eax_input, lateout("eax") eax, lateout("ebx") ebx, lateout("ecx") ecx, lateout("edx") edx);
+    }
+    (eax, ebx, ecx, edx)
+}
+
+#[no_mangle]
+pub extern "C" fn print_cpu_manufacturer() {
+    let mut vendor: [u8; 13] = [0; 13];
+
+    let (eax, ebx, ecx, edx) = kReadCPUID(0x00);
+    let ptr_vendor = vendor.as_ptr() as *mut u32;
+    unsafe {
+        *ptr_vendor.add(0) = ebx;
+        *ptr_vendor.add(1) = edx;
+        *ptr_vendor.add(2) = ecx;
+    }
+    kPrintString(0, 0, vendor.as_ptr());
 }

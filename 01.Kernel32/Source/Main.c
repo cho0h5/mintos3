@@ -27,6 +27,8 @@ void Main() {
   k_initialize_page_tables();
   kPrintString(45, 6, "Pass");
 
+  print_cpu_manufacturer();
+
   while (1)
     ;
 }
