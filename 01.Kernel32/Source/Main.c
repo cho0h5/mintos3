@@ -1,3 +1,4 @@
+#include "ModeSwitch.h"
 #include "Rusty.h"
 #include "Types.h"
 
@@ -39,6 +40,9 @@ void Main() {
     while (1)
       ;
   }
+
+  kPrintString(0, 9, "Switch to IA-32e Mode");
+  // kSwitchAndExecute64bitKernel();
 
   while (1)
     ;
