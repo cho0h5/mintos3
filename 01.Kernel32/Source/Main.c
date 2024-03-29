@@ -31,10 +31,13 @@ void Main() {
                "Processor Vendor String.....................[            ]");
   print_cpu_manufacturer();
 
+  kPrintString(0, 8, "64bit Mode Support Check....................[    ]");
   if (is_support_64()) {
-    kPrintString(0, 7, "Pass");
+    kPrintString(45, 8, "Pass");
   } else {
-    kPrintString(0, 7, "Fail");
+    kPrintString(45, 8, "Fail");
+    while (1)
+      ;
   }
 
   while (1)
