@@ -7,11 +7,6 @@ fn panik(_info: &PanicInfo) -> ! {
     loop {}
 }
 
-extern "C" {
-    fn gpio_put_explicit(pin: i32, on_off: bool) -> i32;
-    fn sleep_ms(time: i32) -> i32;
-}
-
 #[repr(C)]
 struct Character {
     charactor: u8,
@@ -96,14 +91,22 @@ struct PageTableEntryStruct {
 
 const PAGE_FLAGS_P: u32 = 0x00000001;
 const PAGE_FLAGS_RW: u32 = 0x00000002;
+#[allow(dead_code)]
 const PAGE_FLAGS_US: u32 = 0x00000004;
+#[allow(dead_code)]
 const PAGE_FLAGS_PWT: u32 = 0x00000008;
+#[allow(dead_code)]
 const PAGE_FLAGS_PCD: u32 = 0x00000010;
+#[allow(dead_code)]
 const PAGE_FLAGS_A: u32 = 0x00000020;
+#[allow(dead_code)]
 const PAGE_FLAGS_D: u32 = 0x00000040;
 const PAGE_FLAGS_PS: u32 = 0x00000080;
+#[allow(dead_code)]
 const PAGE_FLAGS_G: u32 = 0x00000100;
+#[allow(dead_code)]
 const PAGE_FLAGS_PAT: u32 = 0x00001000;
+#[allow(dead_code)]
 const PAGE_FLAGS_EXB: u32 = 0x80000000;
 const PAGE_FLAGS_DEFAULT: u32 = PAGE_FLAGS_P | PAGE_FLAGS_RW;
 

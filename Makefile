@@ -25,3 +25,7 @@ test: all
     -blockdev driver=file,node-name=f0,filename=./Disk.img \
     -device floppy,drive=f0 $1 $2 $3 \
     -display curses
+
+re:
+	make clean
+	make
