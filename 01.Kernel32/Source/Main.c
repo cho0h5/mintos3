@@ -4,6 +4,8 @@
 
 extern int add(int a, int b);
 
+void kCopyKernel64ImageTo2Mbyte(void);
+
 void Main() {
   kPrintString(0, 3, "C Language Kernel Start.....................[Pass]");
   kPrintString(0, 4, "Mininum Memory Size Check...................[    ]");
@@ -41,8 +43,12 @@ void Main() {
       ;
   }
 
-  kPrintString(0, 9, "Switch to IA-32e Mode");
-  // kSwitchAndExecute64bitKernel();
+  kPrintString(0, 9, "Copy IA-32e Kernel To 2M Address............[    ]");
+  copy_kernel64_image_to_2mbyte();
+  kPrintString(45, 9, "Pass");
+
+  kPrintString(0, 10, "Switch to IA-32e Mode");
+  kSwitchAndExecute64bitKernel();
 
   while (1)
     ;
