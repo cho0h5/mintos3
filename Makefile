@@ -19,7 +19,8 @@ clean:
 	rm -f Disk.img
 	rm -f image_maker
 
-test: all
+test: clean
+	make
 	qemu-system-x86_64 \
     -L . -m 64 -M pc \
     -blockdev driver=file,node-name=f0,filename=./Disk.img \

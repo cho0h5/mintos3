@@ -27,6 +27,8 @@ void Main() {
   k_initialize_page_tables();
   kPrintString(45, 6, "Pass");
 
+  kPrintString(0, 7,
+               "Processor Vendor String.....................[            ]");
   print_cpu_manufacturer();
 
   if (is_support_64()) {

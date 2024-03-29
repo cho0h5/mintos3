@@ -197,7 +197,7 @@ pub extern "C" fn print_cpu_manufacturer() {
         *ptr_vendor.add(1) = edx;
         *ptr_vendor.add(2) = ecx;
     }
-    kPrintString(0, 0, vendor.as_ptr());
+    kPrintString(45, 7, vendor.as_ptr());
 }
 
 #[no_mangle]
