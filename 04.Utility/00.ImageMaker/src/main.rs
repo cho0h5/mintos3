@@ -22,7 +22,11 @@ fn main() -> std::io::Result<()> {
 
     let number_of_copied_sector: u16 = number_of_sector.iter().sum();
     println!("Number of copied sector: {}", number_of_copied_sector - 1);
-    set_number_of_sector(&mut output_file, number_of_copied_sector - 1)?;
+    set_number_of_sector(
+        &mut output_file,
+        number_of_copied_sector - 1,
+        number_of_sector[1],
+    )?;
 
     Ok(())
 }
@@ -57,9 +61,14 @@ fn pad_with_zero(file: &mut File, bytes_read: usize) -> std::io::Result<usize> {
     Ok(bytes_pad)
 }
 
-fn set_number_of_sector(file: &mut File, number_of_sector: u16) -> std::io::Result<()> {
+fn set_number_of_sector(
+    file: &mut File,
+    number_of_total_sector: u16,
+    number_of_kernel32_sector: u16,
+) -> std::io::Result<()> {
     file.seek(SeekFrom::Start(5))?;
-    file.write_all(&number_of_sector.to_le_bytes())?;
+    file.write_all(&number_of_total_sector.to_le_bytes())?;
+    file.write_all(&number_of_kernel32_sector.to_le_bytes())?;
 
     Ok(())
 }
