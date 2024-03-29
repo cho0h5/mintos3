@@ -170,7 +170,7 @@ pub extern "C" fn k_initialize_page_tables() {
     }
 }
 
-fn kReadCPUID(mut eax_input: u32) -> (u32, u32, u32, u32) {
+fn k_read_cpuid(eax_input: u32) -> (u32, u32, u32, u32) {
     use core::arch::asm;
 
     let eax: u32;
@@ -187,7 +187,7 @@ fn kReadCPUID(mut eax_input: u32) -> (u32, u32, u32, u32) {
 pub extern "C" fn print_cpu_manufacturer() {
     let vendor: [u8; 13] = [0; 13];
 
-    let (_, ebx, ecx, edx) = kReadCPUID(0x00);
+    let (_, ebx, ecx, edx) = k_read_cpuid(0x00);
     let ptr_vendor = vendor.as_ptr() as *mut u32;
     unsafe {
         *ptr_vendor.add(0) = ebx;
@@ -199,7 +199,7 @@ pub extern "C" fn print_cpu_manufacturer() {
 
 #[no_mangle]
 pub extern "C" fn is_support_64() -> u8 {
-    let (_, _, _, edx) = kReadCPUID(0x80000001);
+    let (_, _, _, edx) = k_read_cpuid(0x80000001);
 
     (edx & (1 << 29) != 0) as u8
 }
