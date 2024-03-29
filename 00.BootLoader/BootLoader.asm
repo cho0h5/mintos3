@@ -5,7 +5,8 @@ SECTION .text
 
 jmp 0x07C0:START
 
-TOTALSECTORCOUNT: dw 3
+TOTALSECTORCOUNT: dw 0x02
+KERNEL32SECTORCOUNT: dw 0x02
 
 START:
   ; initilize segment register

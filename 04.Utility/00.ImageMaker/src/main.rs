@@ -10,16 +10,17 @@ const SECTOR_SIZE: usize = 512;
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
     let mut output_file = File::create(OUTPUT_FILENAME)?;
+    let mut number_of_sector = vec![];
 
-    let mut number_of_copied_sector: u16 = 0;
     for filename in &args[1..] {
         println!("Concatenate {filename} to {OUTPUT_FILENAME}");
 
         let bytes_read = concatenate_file(&mut output_file, filename).unwrap();
         let bytes_pad = pad_with_zero(&mut output_file, bytes_read).unwrap();
-        number_of_copied_sector += ((bytes_read + bytes_pad) / SECTOR_SIZE) as u16;
+        number_of_sector.push(((bytes_read + bytes_pad) / SECTOR_SIZE) as u16);
     }
 
+    let number_of_copied_sector: u16 = number_of_sector.iter().sum();
     println!("Number of copied sector: {}", number_of_copied_sector - 1);
     set_number_of_sector(&mut output_file, number_of_copied_sector - 1)?;
 
