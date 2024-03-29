@@ -6,16 +6,20 @@ all: Disk.img
 01.Kernel32/Kernel32.bin:
 	make -C 01.Kernel32
 
+02.Kernel64/Kernel64.bin:
+	make -C 02.Kernel64
+
 image_maker:
 	cd 04.Utility && cd 00.ImageMaker && cargo build --release
 	cp 04.Utility/00.ImageMaker/target/release/image_maker .
 
-Disk.img: image_maker 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin
-	./image_maker 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin
+Disk.img: image_maker 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin 02.Kernel64/Kernel64.bin
+	./image_maker 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin 02.Kernel64/Kernel64.bin
 
 clean:
 	make -C 00.BootLoader clean
 	make -C 01.Kernel32 clean
+	make -C 02.Kernel64 clean
 	rm -f Disk.img
 	rm -f image_maker
 
