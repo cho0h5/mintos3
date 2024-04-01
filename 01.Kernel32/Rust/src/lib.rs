@@ -50,12 +50,16 @@ pub extern "C" fn kPrintString(x: usize, y: usize, message: *const u8) {
 
 #[no_mangle]
 pub extern "C" fn kInitializeKernel64Area() -> u8 {
+    #[inline(never)]
+    fn ptr_set_value(ptr: *mut u32, value: u32) {
+        unsafe { *ptr = value }
+    }
+
     for i in 0x100000..0x600000 {
         let pdw_current_address = i as *mut u32;
 
+        ptr_set_value(pdw_current_address, 0x00);
         unsafe {
-            *pdw_current_address = 0x00;
-
             if *pdw_current_address != 0x00 {
                 return 0;
             }
