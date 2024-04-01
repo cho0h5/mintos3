@@ -1,4 +1,5 @@
 #include "ModeSwitch.h"
+#include "Page.h"
 #include "Rusty.h"
 #include "Types.h"
 
@@ -28,7 +29,7 @@ void Main() {
   kPrintString(45, 5, "Pass");
 
   kPrintString(0, 6, "IA-32e Page Tables Initialize...............[    ]");
-  k_initialize_page_tables();
+  kInitializePageTables();
   kPrintString(45, 6, "Pass");
 
   kPrintString(0, 7,
