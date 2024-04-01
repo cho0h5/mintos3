@@ -4,6 +4,7 @@ use core::panic::PanicInfo;
 
 #[panic_handler]
 fn panik(_info: &PanicInfo) -> ! {
+    kPrintString(0, 0, "[{(!PANIC!)}]".as_ptr());
     loop {}
 }
 
