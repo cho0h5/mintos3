@@ -9,6 +9,5 @@ BOOL kIsMemoryEnough();
 void k_initialize_page_tables();
 void print_cpu_manufacturer();
 BOOL is_support_64();
-void copy_kernel64_image_to_2mbyte();
 
 #endif // !RUSTY_H

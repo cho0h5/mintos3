@@ -207,22 +207,3 @@ pub extern "C" fn is_support_64() -> u8 {
 
     (edx & (1 << 29) != 0) as u8
 }
-
-#[no_mangle]
-pub extern "C" fn copy_kernel64_image_to_2mbyte() {
-    let total_kernel_sector_count: u16;
-    let kernel32_sector_count: u16;
-
-    unsafe {
-        total_kernel_sector_count = *(0x7c05 as *const u16);
-        kernel32_sector_count = *(0x7c07 as *const u16);
-    }
-
-    let pdw_source_address = (0x10000 + kernel32_sector_count as u32 * 512) as *const u32;
-    let pdw_destination_address = 0x200000 as *mut u32;
-    for i in 0..(512 * (total_kernel_sector_count - kernel32_sector_count) / 4) {
-        unsafe {
-            *pdw_destination_address.add(i as usize) = *pdw_source_address.add(i as usize);
-        }
-    }
-}
